@@ -86,7 +86,7 @@ class ContentEntityBundleClassManager extends DefaultPluginManager implements Co
             )));
           }
 
-          if (!$reflection->implementsInterface('\Drupal\discoverable_entity_bundle_classes\ContentEntityBundleClassInterface')) {
+          if (!$reflection->implementsInterface('\Drupal\discoverable_entity_bundle_classes\ContentEntityBundleInterface')) {
             throw new \InvalidArgumentException(t('Entity bundle class !class must implement interface ContentEntityBundleClassInterface.', array(
               '!class' => $entity_bundle_class,
             )));
@@ -97,6 +97,9 @@ class ContentEntityBundleClassManager extends DefaultPluginManager implements Co
         catch (\Exception $exception) {
           throw $exception;
         }
+      }
+      else {
+        $this->entityTypeClasses[$entity_type->id()][$bundle] = $entity_type->getClass();
       }
     }
 
