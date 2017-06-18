@@ -10,6 +10,6 @@
  */
 function discoverable_entity_bundle_classes_paragraphs_entity_type_alter(array &$entity_types) {
   if (isset($entity_types['paragraph'])) {
-    $entity_types['paragraph']->setStorageClass('\Drupal\discoverable_entity_bundle_classes\SqlContentEntityStorage');
+    $entity_types['paragraph']->setStorageClass('\Drupal\discoverable_entity_bundle_classes\Storage\SqlContentEntityStorageBase');
   }
 }
