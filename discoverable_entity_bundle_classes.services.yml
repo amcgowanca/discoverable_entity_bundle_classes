@@ -1,0 +1,4 @@
+services:
+  plugin.manager.discoverable_entity_bundle_classes:
+    class: \Drupal\discoverable_entity_bundle_classes\ContentEntityBundleClassManager
+    parent: default_plugin_manager

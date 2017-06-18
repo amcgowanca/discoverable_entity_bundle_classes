@@ -1,0 +1,9 @@
+name: 'Discoverable Entity Bundle Classes - Paragraphs'
+description: 'Provides support for derived paragraph entity type classes.'
+type: module
+core: 8.x
+version: 8.x-1.0
+
+dependencies:
+  - discoverable_entity_bundle_classes
+  - paragraphs
