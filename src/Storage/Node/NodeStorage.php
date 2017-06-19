@@ -6,6 +6,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\discoverable_entity_bundle_classes\Storage\SqlContentEntityStorageBase;
 use Drupal\node\NodeInterface;
+use Drupal\node\NodeStorageInterface;
 
 /**
  * Defines the Node Storage class for discoverable entity bundle classes.
@@ -13,7 +14,7 @@ use Drupal\node\NodeInterface;
  * This is a verbatim copy of Drupal core's NodeStorage class implementation,
  * with the exception that it extends our SqlContentEntityStorageBase.
  */
-class NodeStorage extends SqlContentEntityStorageBase {
+class NodeStorage extends SqlContentEntityStorageBase implements NodeStorageInterface {
 
   /**
    * {@inheritdoc}
