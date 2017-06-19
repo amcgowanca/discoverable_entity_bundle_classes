@@ -2,5 +2,5 @@
 
 /**
  * @file
- * Provides the ability to make available discovered classes which are derived from an entity class.
+ * Provides the auto discovery of content entity bundle classes.
  */

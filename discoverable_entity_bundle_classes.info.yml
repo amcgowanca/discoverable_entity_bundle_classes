@@ -1,5 +1,5 @@
 name: 'Discoverable Entity Bundle Classes'
-description: 'Provides the ability to make available discovered classes which are derived from an entity class.'
+description: 'Provides the auto discovery of content entity bundle classes.'
 type: module
 core: 8.x
 version: 8.x-1.0
