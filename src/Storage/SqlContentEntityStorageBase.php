@@ -3,8 +3,10 @@
 namespace Drupal\discoverable_entity_bundle_classes\Storage;
 
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\discoverable_entity_bundle_classes\ContentEntityBundleClassManagerInterface;
@@ -17,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * discoverability prior to instantiation. This is achbieved by using the plugin
  * manager `plugin.manager.discoverable_entity_bundle_classes`.
  */
-class SqlContentEntityStorageBase extends \Drupal\Core\Entity\Sql\SqlContentEntityStorage {
+class SqlContentEntityStorageBase extends SqlContentEntityStorage {
 
   /**
    * The entity bundle class manager.
@@ -43,7 +45,7 @@ class SqlContentEntityStorageBase extends \Drupal\Core\Entity\Sql\SqlContentEnti
   /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeInterface $entity_type, \Drupal\Core\Database\Connection $database, EntityManagerInterface $entity_manager, CacheBackendInterface $cache, LanguageManagerInterface $language_manager, ContentEntityBundleClassManagerInterface $entity_class_manager = NULL) {
+  public function __construct(EntityTypeInterface $entity_type, Connection $database, EntityManagerInterface $entity_manager, CacheBackendInterface $cache, LanguageManagerInterface $language_manager, ContentEntityBundleClassManagerInterface $entity_class_manager = NULL) {
     parent::__construct($entity_type, $database, $entity_manager, $cache, $language_manager);
     $this->entityClassManager = $entity_class_manager;
   }
@@ -103,7 +105,6 @@ class SqlContentEntityStorageBase extends \Drupal\Core\Entity\Sql\SqlContentEnti
     $this->initFieldValues($entity, $values);
     return $entity;
   }
-
 
   /**
    * {@inheritdoc}

@@ -28,10 +28,6 @@ class ContentEntityBundleClassManager extends DefaultPluginManager implements Co
 
   /**
    * Creates a new ContentEntityBundleClassManager instance.
-   *
-   * @param \Traversable $namespaces
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_backend
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct(
@@ -80,16 +76,16 @@ class ContentEntityBundleClassManager extends DefaultPluginManager implements Co
         try {
           $reflection = new \ReflectionClass($entity_bundle_class);
           if (!$reflection->isSubclassOf($entity_type->getClass())) {
-            throw new \InvalidArgumentException(t('Entity bundle class !class must inherit entity base class: !entity_class.', array(
+            throw new \InvalidArgumentException(t('Entity bundle class !class must inherit entity base class: !entity_class.', [
               '!class' => $entity_bundle_class,
               '!entity_class' => $entity_type->getClass(),
-            )));
+            ]));
           }
 
           if (!$reflection->implementsInterface('\Drupal\discoverable_entity_bundle_classes\ContentEntityBundleInterface')) {
-            throw new \InvalidArgumentException(t('Entity bundle class !class must implement interface ContentEntityBundleClassInterface.', array(
+            throw new \InvalidArgumentException(t('Entity bundle class !class must implement interface ContentEntityBundleClassInterface.', [
               '!class' => $entity_bundle_class,
-            )));
+            ]));
           }
 
           $this->entityTypeClasses[$entity_type->id()][$bundle] = $entity_bundle_class;
