@@ -1,0 +1,10 @@
+{
+  "name": "amcgowanca/discoverable_entity_bundle_classes",
+  "description": "An experimental approach for implementing entity classes for specific bundles.",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "required-dev": { },
+  "require": { }
+}
