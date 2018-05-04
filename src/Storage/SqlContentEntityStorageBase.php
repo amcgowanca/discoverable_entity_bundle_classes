@@ -139,7 +139,7 @@ class SqlContentEntityStorageBase extends SqlContentEntityStorage {
     $translations = array_fill_keys(array_keys($values), []);
 
     // Load values from shared and dedicated tables.
-    $this->loadFromSharedTables($values, $translations);
+    $this->loadFromSharedTables($values, $translations, $load_from_revision);
     $this->loadFromDedicatedTables($values, $load_from_revision);
 
     $entities = [];
