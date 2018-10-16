@@ -7,6 +7,9 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\discoverable_entity_bundle_classes\UsesContentEntityBundleClassManagerTrait;
 
+/**
+ * Provides common SqlContentEntityStorage overrides for enabling discovery.
+ */
 trait SqlContentEntityStorageTrait {
 
   use UsesContentEntityBundleClassManagerTrait;
@@ -22,10 +25,6 @@ trait SqlContentEntityStorageTrait {
    */
   protected function getEntityClass($bundle = NULL) {
     return $this->getEntityClassManager()->getEntityClass($this->getEntityType(), $bundle);
-  }
-
-  protected function getBundleFromValues(array $values = []) {
-    return isset($this->bundleKey) && isset($values[$this->bundleKey]) ? $values[$this->bundleKey] : NULL;
   }
 
   /**
@@ -134,6 +133,20 @@ trait SqlContentEntityStorageTrait {
       $function = $module . '_' . $this->entityTypeId . '_load';
       $function($entities);
     }
+  }
+
+  /**
+   * Retrieve the bundle from an array for early type instantiation.
+   *
+   * @param array $values
+   *   The values.
+   *
+   * @return string
+   *   Returns the name of the bundle if specified by its key in $values. If no
+   *   bundle key is specified, then NULL is returned.
+   */
+  protected function getBundleFromValues(array $values = []) {
+    return isset($this->bundleKey) && isset($values[$this->bundleKey]) ? $values[$this->bundleKey] : NULL;
   }
 
 }
