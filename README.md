@@ -41,7 +41,7 @@ Discoverable Entity Bundle Classes module does not provide any "out of the box" 
     ```php
     namespace Drupal\my_module\Entity;
     
-    use Drupal\node\Entity\Node
+    use Drupal\node\Entity\Node;
     
     class Article extends Node implements ArticleInterface {
     
@@ -55,7 +55,7 @@ Discoverable Entity Bundle Classes module does not provide any "out of the box" 
     ```php
     namespace Drupal\my_module\Entity;
     
-    use Drupal\node\Entity\Node
+    use Drupal\node\Entity\Node;
     use Drupal\discoverable_entity_bundle_classes\ContentEntityBundleInterface;
     
     class Article extends Node implements ArticleInterface, ContentEntityBundleInterface {
@@ -74,7 +74,7 @@ Discoverable Entity Bundle Classes module does not provide any "out of the box" 
     ```php
     namespace Drupal\my_module\Entity;
     
-    use Drupal\node\Entity\Node
+    use Drupal\node\Entity\Node;
     use Drupal\discoverable_entity_bundle_classes\ContentEntityBundleInterface;
     
     /**
