@@ -121,8 +121,24 @@ trait SqlContentEntityStorageTrait {
    * {@inheritdoc}
    */
   protected function postLoad(array &$entities) {
-    $entity_class = $this->getEntityClass();
-    $entity_class::postLoad($this, $entities);
+    // Call postLoad() by bundle if bundleKey is set.
+    // Iterate over entities to determine respective bundles because entities
+    // might are of different types.
+    if (isset($this->bundleKey)) {
+      $entities_by_bundle = [];
+      foreach ($entities as $entity) {
+        $entities_by_bundle[$entity->get($this->bundleKey)->getString()][] = $entity;
+      }
+      foreach ($entities_by_bundle as $bundle => $entities_bundled) {
+        $entity_class = $this->getEntityClass($bundle);
+        $entity_class::postLoad($this, $entities_bundled);
+      }
+    }
+    // Call postLoad() by parent entity if it is not bundled.
+    else {
+      $entity_class = $this->getEntityClass();
+      $entity_class::postLoad($this, $entities);
+    }
     // Call hook_entity_load().
     foreach ($this->moduleHandler()->getImplementations('entity_load') as $module) {
       $function = $module . '_entity_load';
