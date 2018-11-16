@@ -78,24 +78,50 @@ trait SqlContentEntityStorageTrait {
       return [];
     }
 
+    // Document the type of the table mapping.
+    /** @var \Drupal\Core\Entity\Sql\TableMappingInterface $table_mapping */
+    $table_mapping = $this->tableMapping;
+
+    // Get the names of the fields that are stored in the base table and, if
+    // applicable, the revision table. Other entity data will be loaded in
+    // loadFromSharedTables() and loadFromDedicatedTables().
+    $field_names = $table_mapping->getFieldNames($this->baseTable);
+    if ($this->revisionTable) {
+      $field_names = array_unique(array_merge($field_names, $table_mapping->getFieldNames($this->revisionTable)));
+    }
+
     $values = [];
     foreach ($records as $id => $record) {
       $values[$id] = [];
       // Skip the item delta and item value levels (if possible) but let the
       // field assign the value as suiting. This avoids unnecessary array
       // hierarchies and saves memory here.
-      foreach ($record as $name => $value) {
-        // Handle columns named [field_name]__[column_name] (e.g for field types
-        // that store several properties).
-        if ($field_name = strstr($name, '__', TRUE)) {
-          $property_name = substr($name, strpos($name, '__') + 2);
-          $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT][$property_name] = $value;
+      foreach ($field_names as $field_name) {
+
+        $field_columns = $table_mapping->getColumnNames($field_name);
+        // Handle field types that store several properties.
+        if (count($field_columns) > 1) {
+          foreach ($field_columns as $property_name => $column_name) {
+            if (property_exists($record, $column_name)) {
+              $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT][$property_name] = $record->{$column_name};
+              unset($record->{$column_name});
+            }
+          }
         }
+        // Handle field types that store only one property.
         else {
-          // Handle columns named directly after the field (e.g if the field
-          // type only stores one property).
-          $values[$id][$name][LanguageInterface::LANGCODE_DEFAULT] = $value;
+          $column_name = reset($field_columns);
+          if (property_exists($record, $column_name)) {
+            $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = $record->{$column_name};
+            unset($record->{$column_name});
+          }
         }
+      }
+
+      // Handle additional record entries that are not provided by an entity
+      // field, such as 'isDefaultRevision'.
+      foreach ($record as $name => $value) {
+        $values[$id][$name][LanguageInterface::LANGCODE_DEFAULT] = $value;
       }
     }
 
@@ -109,7 +135,7 @@ trait SqlContentEntityStorageTrait {
     $entities = [];
     foreach ($values as $id => $entity_values) {
       $bundle = $this->bundleKey ? $entity_values[$this->bundleKey][LanguageInterface::LANGCODE_DEFAULT] : FALSE;
-      // Turn the record into an entity class.
+      // Turn the record into an entity class by bundle.
       $entity_class = $this->getEntityClass($bundle);
       $entities[$id] = new $entity_class($entity_values, $this->entityTypeId, $bundle, array_keys($translations[$id]));
     }
