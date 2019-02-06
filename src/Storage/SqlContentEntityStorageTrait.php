@@ -3,7 +3,6 @@
 namespace Drupal\discoverable_entity_bundle_classes\Storage;
 
 use Drupal\Core\Entity\EntityStorageException;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\discoverable_entity_bundle_classes\UsesContentEntityBundleClassManagerTrait;
 
@@ -24,7 +23,7 @@ trait SqlContentEntityStorageTrait {
    *   The class name.
    */
   protected function getEntityClass($bundle = NULL) {
-    return $this->getEntityClassManager()->getEntityClass($this->getEntityType(), $bundle);
+    return $this->entityClassManager()->getEntityClass($this->getEntityType(), $bundle);
   }
 
   /**

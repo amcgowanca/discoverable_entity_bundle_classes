@@ -23,7 +23,9 @@ class ContentEntityBundleClass extends Plugin {
    *
    * @var string
    */
+  // @codingStandardsIgnoreStart
   public $entity_type;
+  // @codingStandardsIgnoreEnd
 
   /**
    * The machine name of the bundle this class applies too.
@@ -33,10 +35,19 @@ class ContentEntityBundleClass extends Plugin {
   public $bundle;
 
   /**
+   * The handlers for this bundle.
+   *
+   * @var array
+   */
+  public $handlers = [];
+
+  /**
    * Returns the Plugin ID.
    *
    * @return string
    *   The unique plugin id, created from the entity type and bundle.
+   *
+   * @deprecated
    */
   public function getId() {
     return $this->definition['entity_type'] . ':' . $this->definition['bundle'];
