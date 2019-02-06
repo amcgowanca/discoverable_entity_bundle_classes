@@ -1,4 +1,9 @@
 services:
   plugin.manager.discoverable_entity_bundle_classes:
-    class: \Drupal\discoverable_entity_bundle_classes\ContentEntityBundleClassManager
+    class: Drupal\discoverable_entity_bundle_classes\ContentEntityBundleClassManager
     parent: default_plugin_manager
+  discoverable_entity_bundle_classes.subscribers.controller:
+    class: Drupal\discoverable_entity_bundle_classes\EventSubscriber\EntityViewSubscriber
+    arguments: ['@http_kernel.controller.argument_resolver', '@renderer', '@class_resolver', '@entity_type.manager', '@plugin.manager.discoverable_entity_bundle_classes', '@current_route_match']
+    tags:
+      - { name: event_subscriber }

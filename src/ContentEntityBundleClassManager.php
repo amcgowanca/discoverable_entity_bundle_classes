@@ -6,11 +6,14 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Defines a content entity bundle class manager.
  */
 class ContentEntityBundleClassManager extends DefaultPluginManager implements ContentEntityBundleClassManagerInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The entity type manager.
@@ -44,19 +47,26 @@ class ContentEntityBundleClassManager extends DefaultPluginManager implements Co
   }
 
   /**
-   * Returns the class name for the entity type and bundle.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type.
-   * @param string $bundle
-   *   The name of the entity bundle. If not specified, the entity provider's
-   *   base class name will be returned.
-   *
-   * @return string
-   *   The entity class name.
-   *
-   * @throws \Exception
-   *   Thrown if the specialized implementation does not meet criteria.
+   * {@inheritdoc}
+   */
+  public function createInstance($plugin_id, array $configuration = []) {
+    $definition = $this->getDefinition($plugin_id);
+    return new ContentEntityBundleClassPlugin($plugin_id, $definition, $configuration);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPlugin(EntityTypeInterface $entity_type, $bundle) {
+    $plugin_id = $entity_type->id() . ':' . $bundle;
+    if ($this->hasDefinition($plugin_id)) {
+      return $this->createInstance($plugin_id);
+    }
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function getEntityClass(EntityTypeInterface $entity_type, $bundle = NULL) {
     if (!isset($this->entityTypeClasses[$entity_type->id()])) {
@@ -76,14 +86,14 @@ class ContentEntityBundleClassManager extends DefaultPluginManager implements Co
         try {
           $reflection = new \ReflectionClass($entity_bundle_class);
           if (!$reflection->isSubclassOf($entity_type->getClass())) {
-            throw new \InvalidArgumentException(t('Entity bundle class !class must inherit entity base class: !entity_class.', [
+            throw new \InvalidArgumentException($this->t('Entity bundle class !class must inherit entity base class: !entity_class.', [
               '!class' => $entity_bundle_class,
               '!entity_class' => $entity_type->getClass(),
             ]));
           }
 
           if (!$reflection->implementsInterface('\Drupal\discoverable_entity_bundle_classes\ContentEntityBundleInterface')) {
-            throw new \InvalidArgumentException(t('Entity bundle class !class must implement interface ContentEntityBundleClassInterface.', [
+            throw new \InvalidArgumentException($this->t('Entity bundle class !class must implement interface ContentEntityBundleClassInterface.', [
               '!class' => $entity_bundle_class,
             ]));
           }
