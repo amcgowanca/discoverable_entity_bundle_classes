@@ -5,12 +5,16 @@ namespace Drupal\discoverable_entity_bundle_classes\Storage;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\discoverable_entity_bundle_classes\UsesContentEntityBundleClassManagerTrait;
+use Drupal\entity_utilities\Storage\SqlContentEntityStorageEntityClassRetriever;
 
 /**
  * Provides common SqlContentEntityStorage overrides for enabling discovery.
  */
 trait SqlContentEntityStorageTrait {
 
+  use SqlContentEntityStorageEntityClassRetriever {
+    getEntityClass as getBaseEntityClass;
+  }
   use UsesContentEntityBundleClassManagerTrait;
 
   /**

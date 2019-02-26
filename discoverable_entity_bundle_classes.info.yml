@@ -3,3 +3,6 @@ description: 'Provides the auto discovery of content entity bundle classes.'
 type: module
 core: 8.x
 version: 8.x-1.0
+
+dependencies:
+  - entity_utilities:entity_utilities

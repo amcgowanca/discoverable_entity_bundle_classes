@@ -6,5 +6,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "required-dev": { },
-  "require": { }
+  "require": {
+      "amcgowanca/entity_utilities": "dev-8.x-1.x"
+  }
 }
