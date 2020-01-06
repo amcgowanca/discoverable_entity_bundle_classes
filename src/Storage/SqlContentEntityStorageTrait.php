@@ -2,6 +2,7 @@
 
 namespace Drupal\discoverable_entity_bundle_classes\Storage;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\discoverable_entity_bundle_classes\UsesContentEntityBundleClassManagerTrait;
@@ -124,8 +125,15 @@ trait SqlContentEntityStorageTrait {
    * {@inheritdoc}
    */
   protected function postLoad(array &$entities) {
-    $entity_class = $this->getEntityClass();
-    $entity_class::postLoad($this, $entities);
+    // Call ::postLoad() on the bundle class.
+    $bundled_entities = [];
+    foreach ($entities as $entity) {
+      $bundled_entities[$this->getBundleFromEntity($entity)][] = $entity;
+    }
+    foreach ($bundled_entities as $bundle => $bundle_entities) {
+      $entity_class = $this->getEntityClass($bundle);
+      $entity_class::postLoad($this, $bundle_entities);
+    }
     // Call hook_entity_load().
     foreach ($this->moduleHandler()->getImplementations('entity_load') as $module) {
       $function = $module . '_entity_load';
@@ -150,6 +158,20 @@ trait SqlContentEntityStorageTrait {
    */
   protected function getBundleFromValues(array $values = []) {
     return isset($this->bundleKey) && isset($values[$this->bundleKey]) ? $values[$this->bundleKey] : NULL;
+  }
+
+  /**
+   * Gets the bundle from an entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity.
+   *
+   * @return string
+   *   Returns the name of the bundle if specified by its key in $values. If no
+   *   bundle key is specified, then NULL is returned.
+   */
+  protected function getBundleFromEntity(EntityInterface $entity) {
+    return isset($this->bundleKey) ? $entity->get($this->bundleKey)->target_id : NULL;
   }
 
 }
