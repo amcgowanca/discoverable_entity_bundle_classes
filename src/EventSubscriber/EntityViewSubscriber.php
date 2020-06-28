@@ -9,7 +9,7 @@ use Drupal\Core\EventSubscriber\EarlyRenderingControllerWrapperSubscriber;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\discoverable_entity_bundle_classes\ContentEntityBundleClassManagerInterface;
 use Drupal\discoverable_entity_bundle_classes\ContentEntityBundleInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Drupal\Core\Render\RendererInterface;
 
@@ -78,13 +78,13 @@ class EntityViewSubscriber extends EarlyRenderingControllerWrapperSubscriber {
   /**
    * Acts and responds to controller negotiation events.
    *
-   * @param \Symfony\Component\HttpKernel\Event\FilterControllerEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ControllerEvent $event
    *   The event.
    *
    * @throws \Exception
    *   Any non-caught exceptions are passed through.
    */
-  public function onController(FilterControllerEvent $event) {
+  public function onController(ControllerEvent $event) {
     if (!$event->isMasterRequest()) {
       return;
     }
@@ -93,7 +93,7 @@ class EntityViewSubscriber extends EarlyRenderingControllerWrapperSubscriber {
       return;
     }
 
-    list(, $entity_type_id, $route_type) = explode('.', $this->currentRouteMatch->getRouteName());
+    [, $entity_type_id, $route_type] = explode('.', $this->currentRouteMatch->getRouteName());
 
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     $entity = $this->currentRouteMatch->getParameter($entity_type_id);
@@ -110,10 +110,10 @@ class EntityViewSubscriber extends EarlyRenderingControllerWrapperSubscriber {
     $handlers = $entity_class_plugin->getHandlers();
     if (!empty($handlers['controllers'][$route_type])) {
       $default_controller = $this->currentRouteMatch->getRouteObject()->getDefault('_controller');
-      list($default_controller_class) = explode('::', $default_controller);
+      [$default_controller_class] = explode('::', $default_controller);
       $default_controller_reflection = new \ReflectionClass($default_controller_class);
 
-      list($controller_class, $controller_method) = explode('::', $handlers['controllers'][$route_type]);
+      [$controller_class, $controller_method] = explode('::', $handlers['controllers'][$route_type]);
       $reflection = new \ReflectionClass($controller_class);
       if (!$reflection->isSubclassOf($default_controller_reflection->getName())) {
         throw new \InvalidArgumentException(sprintf('"%s" is not of type "%s".', $handlers['view_controller'], $default_controller_class));
