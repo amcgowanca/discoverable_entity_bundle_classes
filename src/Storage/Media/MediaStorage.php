@@ -3,7 +3,7 @@
 namespace Drupal\discoverable_entity_bundle_classes\Storage\Media;
 
 use Drupal\discoverable_entity_bundle_classes\Storage\SqlContentEntityStorageTrait;
-use Drupal\media\MediaStorage as MediastorageBase;
+use Drupal\media\MediaStorage as MediaStorageBase;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 
 /**
