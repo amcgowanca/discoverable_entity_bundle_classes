@@ -82,7 +82,7 @@ Discoverable Entity Bundle Classes module does not provide any "out of the box" 
      *
      * @ContentEntityBundleClass(
      *   label = @Translation("Article"),
-     *   entity_type = "node"
+     *   entity_type = "node",
      *   bundle = "article"
      * );
      */
