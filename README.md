@@ -31,7 +31,7 @@ Discoverable Entity Bundle Classes module does not provide any "out of the box" 
     function my_module_entity_type_alter(&$entity_types) {
       /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
       if (isset($entity_types['node'])) {
-        $entity_types['node']->setStorageClass('\Drupal\discoverable_entity_bundle_classes\Storage\Node\NodeStorage`);
+        $entity_types['node']->setStorageClass('\Drupal\discoverable_entity_bundle_classes\Storage\Node\NodeStorage');
       }
     }
     ```
@@ -82,7 +82,7 @@ Discoverable Entity Bundle Classes module does not provide any "out of the box" 
      *
      * @ContentEntityBundleClass(
      *   label = @Translation("Article"),
-     *   entity_type = "node"
+     *   entity_type = "node",
      *   bundle = "article"
      * );
      */
