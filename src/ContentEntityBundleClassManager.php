@@ -40,6 +40,8 @@ class ContentEntityBundleClassManager extends DefaultPluginManager implements Co
       'Drupal\discoverable_entity_bundle_classes\ContentEntityBundleClassInterface',
       'Drupal\discoverable_entity_bundle_classes\Annotation\ContentEntityBundleClass'
     );
+
+    $this->alterInfo('discoverable_entity_bundle_classes');
     $this->setCacheBackend($cache_backend, 'content_entity_bundle_class_plugins');
 
     // @todo: get this into a service arg.
